@@ -267,7 +267,9 @@ const home = () => {
         <ScrollView
         showsVerticalScrollIndicator={false}
         style={{
-            backgroundColor: 'white'
+            backgroundColor: 'white',
+            paddingTop: 50,
+            height: undefined
         }}
         >
             <View style={{padding: 20}}>
@@ -640,14 +642,29 @@ const home = () => {
 
             <View
             style={{
-                marginTop: 100,
+                flex: 2,
                 backgroundColor: 'black',
                 width: '100%',
-                height: 200
+                height: 200,
+                padding: 20,
+                flexDirection: 'row',
+                marginBottom: 50
             }}
             >
-                <Text>About</Text>
-                <Link href="/users/user"><Text>hsdhfhasodf</Text></Link>
+                <View style={{flex: 2, width: '50%', height: '100%', justifyContent: 'flex-end'}}>
+                    <Text style={{fontSize: 30, fontWeight: 100, color: 'white', marginBottom: 'auto'}}>The end</Text>
+                    <Text style={{fontSize: 30, fontWeight: 100, color: 'white'}}>Learn more</Text>
+                    <Link
+                    style={{fontSize: 30, fontWeight: 100, color: 'white', backgroundColor: 'red', width: 100, alignItems: 'center'}}
+                    href="/About/main"><Text>Here</Text></Link>
+                </View>
+                <View style={{flex: 2, width: '50%', height: '100%', alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: 'white'}}>
+                    <Text style={{fontSize: 30, fontWeight: 100, color: 'white'}}>Download</Text>
+                    <Link href="/" style={{backgroundColor: 'white', padding: 5}}>
+                        <Text style={{fontSize: 30, fontWeight: 100, color: 'black'}}>APK</Text>
+                    </Link>
+                </View>
+                
             </View>
         </ScrollView>
     );
