@@ -1,8 +1,9 @@
 {
   "expo": {
-    "name": "ArtAnalyzer",
-    "slug": "ArtAnalyzer",
-    "version": "1.0.0",
+    "name": "ArtAnalyze",
+    "slug": "ArtAnalyze",
+    "scheme": "ArtAnalyze",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -19,12 +20,31 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/logo.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.febryans.ArtAnalyzer"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
+    },
+    "plugins": [
+      "expo-router"
+    ],
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "ccbe99d8-ff52-444f-9df5-a298b40b010b"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/ccbe99d8-ff52-444f-9df5-a298b40b010b"
     }
   }
 }
