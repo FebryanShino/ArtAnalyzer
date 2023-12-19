@@ -8,9 +8,6 @@ const UserPage = () => {
     return (
     <View>
         <Text>Hello</Text>
-        <TouchableOpacity onPress={ () => router.push('/') }>
-            <Text>haosdifhaisdf</Text>
-        </TouchableOpacity>
     </View>
     )
 }

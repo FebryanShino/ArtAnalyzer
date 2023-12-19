@@ -1,17 +1,22 @@
-import { Stack } from "expo-router"
+import { Stack, Tabs } from "expo-router"
+import { Image } from 'react-native'
 
 const Layout = () => {
-    return <Stack>
-        <Stack.Screen name="index" options={
+    return <Tabs>
+        <Tabs.Screen name="index" options={{
+            headerShown: false,
+            tabBarLabel: 'Home',
+            tabBarIcon: () => (
+                <Image
+                style={{height: '100%', aspectRatio: 1, borderRadius: 100}}
+                source={{uri: 'https://cdn.donmai.us/sample/08/aa/__kamisato_ayaka_and_kamisato_ayaka_genshin_impact__sample-08aab9d0ca09bac1a724ffe85ea1a3e1.jpg'}}></Image>
+            )
+        }}
+        />
+        <Tabs.Screen name="(tabs)" options={
             {headerShown: false}
         }/>
-        <Stack.Screen name="About/main" options={
-            {headerTitle: 'About', headerShown: true}
-        }/>
-        <Stack.Screen name="variations/[variation]" options={
-            {headerTitle: 'Variation', headerShown: true}
-        }/>
-    </Stack>
+    </Tabs>
 }
 
 

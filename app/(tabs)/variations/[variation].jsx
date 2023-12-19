@@ -26,7 +26,7 @@ const UserPage = () => {
 
     const varDesc = {
         Lineart: 'This variation uses Python Imaging Library (PIL) to process an image by converting it to grayscale and applying the Laplacian edge detection algorithm. The resulting image highlights edges with an inverted color scheme, emphasizing areas of rapid intensity',
-        Lightness: 'This variation Python Imagin Library (PIL) to process an image by converting it to grayscale by using the "L" mode, effectively representing the image in terms of its lightness values rather than color information'
+        Lightness: 'This variation Python Imaging Library (PIL) to process an image by converting it to grayscale by using the "L" mode, effectively representing the image in terms of its lightness values rather than color information'
     }
 
 
@@ -34,11 +34,11 @@ const UserPage = () => {
     <SafeAreaView style={{backgroundColor: 'white', padding: 20, height: '100%'}}>
         <Text style={{fontSize: 40, fontWeight: 200, color: formatRGB(palettes[0])}}>{variation}</Text>
         <Text style={{fontSize: 15, fontWeight: 100, color: formatRGB(palettes[1])}}>{varDesc[variation]}</Text>
-        <Image source={{uri: url}} style={{width: undefined, height: '50%', aspectRatio: 1/ratio, alignSelf: 'center', marginTop: 40}}/>
+        <Image source={{uri: url}} style={{width: '100%', maxHeight: '50%', aspectRatio: 1/ratio, alignSelf: 'center', marginTop: 40}}/>
         <TouchableOpacity
         style={{
             backgroundColor: formatRGB(palettes[0]),
-            width: 100/ratio + '%',
+            width: 100 + '%',
             height: 40,
             alignSelf: 'center',
             alignItems: 'center',

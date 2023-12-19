@@ -2,7 +2,8 @@ import { View, Text, TextInput, Button, Image, Alert, FlatList, ScrollView, Safe
 StyleSheet, Modal, Pressable } from 'react-native'
 import { useEffect, useState } from 'react'
 import { Link, router } from 'expo-router';
-
+import ColorDetails from '../../components/ColorModal'
+import TagModal from '../../components/TagModal';
 
 
 
@@ -28,7 +29,7 @@ const home = () => {
         ],
         aspectRatio: 1
     });
-    const [colors, setColors] = useState()
+    const [colors, setColors] = useState([[[[247,244,243],[63,55,87],[173,160,162]],"#f7f4f3"],[[[247,244,243],[63,55,87],[173,160,162]],"#3f3757"],[[[247,244,243],[63,55,87],[173,160,162]],"#ada0a2"]])
     const [colorModalVisible, setColorModalVisible] = useState(false);
     const [tagModalVisible, setTagModalVisible] = useState(false);
     const [colorData, setColorData] = useState('');
@@ -106,6 +107,7 @@ const home = () => {
         }
         
         setColors(colorArr);
+        console.log(JSON.stringify(colorArr))
         setLineart({urls: [content[0], content[2]], aspectRatio: content[3]});
         setTagsData(selectedImg.tag_string_general.split(' '));
         setCurrentOutput(selectedImg);
@@ -113,155 +115,7 @@ const home = () => {
     }
 
 
-    const ColorDetails = ({data, visible}) => {
-        const modalStyle = {
-            main: {
-                width: '100%',
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'left',
-                gap: 3
-            },
-            title: {
-                fontSize: 15,
-                fontWeight: 200
-            },
-            subTitle: {
-                fontWeight: 100,
-                fontSize: 12,
-                marginTop: 8
-            },
-            percentage: {
-                fontSize: 15,
-                fontWeight: 200
-            }
-        };
-        
-        return (
-        <Modal
-        animationType="slide"
-        transparent={true}
-        visible={visible}
-        >
-            <View
-            style={{
-                alignSelf: 'center',
-                marginVertical: '30%',
-                width: '80%',
-                backgroundColor: 'white',
-                borderColor: 'black',
-                borderWidth: .2,
-                borderRadius: 10,
-                padding: 20,
-                flex: 1
-                
-            }}
-            >
-                <View style={{flexDirection: 'row', height: '8%', alignItems: 'center'}}>
-                    <Text
-                    style={{
-                        fontSize: 25,
-                        fontWeight: 200,
-                        fontVariant: 'bold',
-                        flex: 2
-                        }}
-                    >Color Details</Text>
-                    <Pressable
-                    style={{height: '100%', aspectRatio: 1, alignItems: 'center', justifyContent: 'center'}}
-                    onPress={() => setColorModalVisible(!visible)}
-                    >
-                        <View style={{width: '80%', height: 1, backgroundColor: 'black', transform: 'rotate(45deg)'}}></View>
-                        <View style={{width: '80%', height: 1, backgroundColor: 'black', transform: 'rotate(-45deg) translateY(-1dp)'}}></View>
-                    </Pressable>
-                </View>
-                
-                <View
-                style={{
-                    width: '100%',
-                    height: '25%',
-                    flexDirection: 'row',
-                    position: 'relative',
-                    marginTop: '12%'
-                }}
-                >
-                    <View style={{ height: '100%', width: undefined, aspectRatio: 1, backgroundColor: data.hex.value, borderRadius: 5}}></View>
-                    <View style={{justifyContent: 'center', alignItems: 'center', flex: 2, padding: 5}}>
-                        <Text style= {{
-                            fontSize: 20,
-                            fontWeight: 100,
-                            fontVariant: 'bold'
-                        }}
-                    >{data.name.value}</Text>
-                    </View>
-                </View>
     
-                <View style={{marginTop: '10%', gap: 20}}>
-                    <Text style={{fontSize: 20, fontWeight: 200}}>Value</Text>
-                    <View>
-                        <Text style={modalStyle.title}>RGB</Text>
-                        <View
-                        style={modalStyle.main}>
-                            <View style={{height: 2, width: data.rgb.fraction.r*85 + '%', backgroundColor: `rgb(255, ${255-data.rgb.r}, ${255-data.rgb.r})`}}></View>
-                            <Text style={modalStyle.percentage}>{Math.round(data.rgb.fraction.r*100) + '%'}</Text>
-                        </View>
-                        <View
-                        style={modalStyle.main}>
-                            <View style={{height: 2, width: data.rgb.fraction.g*85 + '%', backgroundColor: `rgb(${255-data.rgb.g}, 255, ${255-data.rgb.g})`}}></View>
-                            <Text style={modalStyle.percentage}>{Math.round(data.rgb.fraction.g*100) + '%'}</Text>
-                        </View>
-                        <View
-                        style={modalStyle.main}>
-                            <View style={{height: 2, width: data.rgb.fraction.b*85 + '%', backgroundColor: `rgb(${255-data.rgb.b}, ${255-data.rgb.b}, 255)`}}></View>
-                            <Text style={modalStyle.percentage}>{Math.round(data.rgb.fraction.b*100) + '%'}</Text>
-                        </View>
-                    </View>
-                    <View>
-                        <Text style={modalStyle.title}>HSL</Text>
-                        <View>
-                            <Text style={modalStyle.subTitle}>Hue</Text>
-                            <View
-                            style={modalStyle.main}
-                            >
-                                <View style={{
-                                    height: 30, width: '100%', flex: 2, backgroundColor: `hsl(${data.hsl.h}, 100%, 50%)`,
-                                    justifyContent: 'center', alignItems: 'center', borderRadius: 5
-                                    }}
-                                >
-                                <Text style={{
-                                    fontSize: 15,
-                                    fontWeight: 200,
-                                    fontVariant: 'bold',
-                                    color: 'white'
-                                }}>{data.hsl.h}</Text>
-                                </View>
-                                
-                            </View>
-                        </View>
-                        <View>
-                            <Text style={modalStyle.subTitle}>Saturation</Text>
-                            <View
-                            style={modalStyle.main}
-                            >
-                                <View style={{height: 2, width: data.hsl.fraction.s*85 + '%', backgroundColor: `hsl(${data.hsl.h}, ${data.hsl.s}%, 50%)`}}></View>
-                                <Text style={modalStyle.percentage}>{data.hsl.s + '%'}</Text>
-                            </View>
-                        </View>
-                        <View>
-                            <Text style={modalStyle.subTitle}>Lightness</Text>
-                            <View
-                            style={modalStyle.main}
-                            >
-                                <View style={{height: 2, width: data.hsl.fraction.l*85 + '%', backgroundColor: `hsl(0, 0%, ${data.hsl.l}%)`}}></View>
-                                <Text style={modalStyle.percentage}>{data.hsl.l + '%'}</Text>
-                            </View>
-                        </View>
-                    </View>
-                </View>
-    
-            </View>
-        </Modal>
-        )
-    }
 
     return (
         <ScrollView
@@ -448,6 +302,7 @@ const home = () => {
                     let response = await fetch(`https://www.thecolorapi.com/id?hex=${item[1].slice(1)}`);
                     let data = await response.json()
                     setColorData(data);
+                    
                     setColorModalVisible(true);
                 })}
                 >
@@ -460,8 +315,12 @@ const home = () => {
             </View>
 
             { colorData && (
-                <ColorDetails data={colorData} visible={colorModalVisible}></ColorDetails>
+                <ColorDetails data={colorData} visible={colorModalVisible} status={setColorModalVisible}></ColorDetails>
             )}
+
+
+
+
             
             
             <Text
@@ -529,7 +388,8 @@ const home = () => {
                 justifyContent: 'center',
                 gap: 3,
                 paddingHorizontal: 5,
-                marginTop: 10
+                marginTop: 10,
+                marginBottom: 50
                 }}>
                     { tagsData.map( (item) => (
                         <TouchableOpacity
@@ -540,7 +400,7 @@ const home = () => {
                             let dataTag = await resTag.json();
                             
                             setTagWiki(dataTag);
-                            let resPost = await fetch(`https://danbooru.donmai.us/posts.json?tags=${item}%20rating:g&limit=2`);
+                            let resPost = await fetch(`https://danbooru.donmai.us/posts.json?tags=${item}&limit=2`);
                             let dataPost = await resPost.json();
                             
                             setRelatedPosts(dataPost);
@@ -556,87 +416,9 @@ const home = () => {
                     ))
                     }
                 </View>
-                {tagModalVisible && (<Modal
-                animationType="slide"
-                transparent={true}
-                visible={tagModalVisible}
-                >
-                    <View
-                    style={{
-                        backgroundColor: 'white',
-                        width: '80%',
-                        height: '50%',
-                        alignSelf: 'center',
-                        marginTop: '50%',
-                        padding: 20,
-                        position: 'relative',
-                        borderWidth: .2,
-                        borderColor: 'hsl(0, 0%, 30%)'
-                    }}
-                    >
-                        <TouchableOpacity style={{
-                            position: 'absolute',
-                            width: '12%',
-                            aspectRatio: 1,
-                            height: undefined,
-                            backgroundColor: 'black',
-                            right: 20,
-                            top: 20,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            zIndex: 999
-                        }}
-                        onPress={() => setTagModalVisible(!tagModalVisible)}
-                        >
-                            <Text style={{fontSize: 15, fontWeight: 100, color: 'white'}}>X</Text>
-                        </TouchableOpacity>
-                        <Text style={{fontSize: 30, fontWeight: 200}}>{tagWiki.title}</Text>
-                        <View style={{flexDirection: 'row', flexWrap: 'wrap', gap: 3}}>
-                            { tagWiki.other_names.map(( name ) => (
-
-                                <TouchableOpacity
-                                onPress={() => Alert.alert(name, name) }
-                                style={{
-                                    backgroundColor: 'hsl(0,0%, 95%)',
-                                    padding: 5,
-                                    minWidth: 50,
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    borderRadius: 5
-                                }}
-                                >
-                                    <Text style={{fontSize: 10, fontWeight: 100}}>{name}</Text>
-                                    
-                                </TouchableOpacity>
-                            ))}
-                        </View>
-                        <Text
-                        style={{
-                            fontSize: 13,
-                            fontWeight: 100,
-                            color: 'hsl(0,0%, 10%)',
-                            marginTop: '10%'
-                        }}
-                        >{tagWiki.body.split('.')[0]}</Text>
-                        <Text
-                        style={{
-                            fontSize: 20,
-                            fontWeight: 200,
-                            color: 'hsl(0,0%, 10%)',
-                            marginTop: 'auto'
-                        }}
-                        >Related Posts</Text>
-                        <View style={{flexDirection: 'row', gap: 10}}>
-                                {relatedPosts.map(( post ) => (
-                                    <Image source={{uri: post.large_file_url}} style={{flex: 2, width: '100%', height: undefined, aspectRatio: 1}}/>
-                                )
-                                )}
-                        </View>
-                        <View>
-
-                        </View>
-                    </View>
-                </Modal>)}
+                { tagModalVisible && (
+                    <TagModal data={tagWiki} posts={relatedPosts} visible={tagModalVisible} status={setTagModalVisible}/>
+                )}
             </View>
             </View>)}
 
