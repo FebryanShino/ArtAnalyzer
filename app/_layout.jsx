@@ -1,6 +1,7 @@
 import { Stack, Tabs } from "expo-router"
 import { Image } from 'react-native'
 
+
 const Layout = () => {
     return <Tabs>
         <Tabs.Screen name="index" options={{
@@ -18,6 +19,12 @@ const Layout = () => {
         }/>
     </Tabs>
 }
+
+
+
+
+
+
 
 
 export default Layout;

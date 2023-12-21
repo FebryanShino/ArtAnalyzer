@@ -85,7 +85,13 @@ const ColorDetails = ({data, visible, status}) => {
                         fontWeight: 100,
                         fontVariant: 'bold'
                     }}
-                >{data.name.value}</Text>
+                    >{data.name.value}</Text>
+                    <Text style= {{
+                        fontSize: 20,
+                        fontWeight: 100,
+                        fontVariant: 'bold'
+                    }}
+                    >{data.hex.value}</Text>
                 </View>
             </View>
 
