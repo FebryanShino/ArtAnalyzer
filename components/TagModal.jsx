@@ -1,6 +1,13 @@
+import { useState } from 'react'
 import { View, Text, Modal, TouchableOpacity, Image, Alert } from 'react-native'
+import { Audio } from 'expo-av';
+import {API_URL, HF_KEY} from '@env'
+
 
 const TagModal = ({data, posts, visible, status}) => {
+    const [selectedNameIndex, setSelectedNameIndex] = useState();
+    const [fetchFinished, setFetchFinished] = useState(true);
+
     return (
     <Modal
     animationType="slide"
@@ -38,12 +45,27 @@ const TagModal = ({data, posts, visible, status}) => {
             </TouchableOpacity>
             <Text style={{fontSize: 30, fontWeight: 200}}>{data.title}</Text>
             <View style={{flexDirection: 'row', flexWrap: 'wrap', gap: 3}}>
-                { data.other_names.map(( name ) => (
+                { data.other_names.map(( name, index ) => (
 
                     <TouchableOpacity
-                    onPress={() => Alert.alert(name, name) }
+                    key={index}
+                    onPress={() => {
+                        setSelectedNameIndex(index);
+                        setFetchFinished(false);
+                        fetchSound(name).then( async (data) => {
+                            
+                            const { sound } = await Audio.Sound.createAsync({uri: data})
+                            
+                            await sound.stopAsync();
+                            await sound.playAsync();
+                            setFetchFinished(true)
+
+                            
+                            setTimeout(() => sound.unloadAsync(), 1500)
+                        })
+                    } }
                     style={{
-                        backgroundColor: 'hsl(0,0%, 95%)',
+                        backgroundColor: selectedNameIndex === index && !fetchFinished ? 'black' : 'hsl(0,0%, 95%)',
                         padding: 5,
                         minWidth: 50,
                         alignItems: 'center',
@@ -51,7 +73,10 @@ const TagModal = ({data, posts, visible, status}) => {
                         borderRadius: 5
                     }}
                     >
-                        <Text style={{fontSize: 10, fontWeight: 100}}>{name}</Text>
+                        <Text style={{
+                            fontSize: 10, fontWeight: 100,
+                            color: selectedNameIndex === index && !fetchFinished ? 'white' : 'black'
+                            }}>{name}</Text>
                         
                     </TouchableOpacity>
                 ))}
@@ -72,12 +97,19 @@ const TagModal = ({data, posts, visible, status}) => {
                 marginTop: 'auto'
             }}
             >Related Posts</Text>
-            <View style={{flexDirection: 'row', gap: 10}}>
-                    {posts.map(( post ) => (
-                        <Image source={{uri: post.large_file_url}} style={{flex: 2, width: '100%', height: undefined, aspectRatio: 1}}/>
+            
+            { posts && (<View style={{flexDirection: 'row', gap: 10}}>
+                    {posts.map(( post, index ) => (
+                        <Image
+                        key={ index }
+                        source={{uri: post.large_file_url}}
+                        style={{flex: 2, width: '100%', height: undefined, aspectRatio: 1}}
+
+                        />
                     )
                     )}
             </View>
+            )}
             <View>
 
             </View>
@@ -87,3 +119,40 @@ const TagModal = ({data, posts, visible, status}) => {
 }
 
 export default TagModal;
+
+
+
+const fetchSound = async (text) => {
+    const url = "https://febryans-mikamika.hf.space/run/predict";
+    const token = "Bearer " + HF_KEY;
+    const chara = 'ayaka-jp';
+    const lang = 'Japanese';
+    const noise = 0.6;
+    const noiseW = 0.668;
+    const length = 1;
+    const isSymbol = false;
+    const data = {
+        data: [
+            chara,
+            text,
+            lang,
+            noise,
+            noiseW,
+            length,
+            isSymbol
+        ]
+    }
+
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token
+        },
+        body: JSON.stringify(data)
+    });
+
+    const responseData = await response.json();
+    console.log('fetched')
+    return responseData.data[1];
+}
