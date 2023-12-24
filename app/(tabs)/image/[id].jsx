@@ -12,7 +12,7 @@ const image = () => {
             <Text>HffsdfsdfdsdfsddsfffdfsloS</Text>
             </View>
             <Animated.Image
-            // sharedTransitionTag={imageId}
+            sharedTransitionTag={imageId}
             source={{ uri: url }}
             style={{
                 width: '100%',

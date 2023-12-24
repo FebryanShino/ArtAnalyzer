@@ -184,7 +184,7 @@ const home = () => {
                         router.push({
                         pathname: 'image/' + index,
                         params: {
-                            imageId: index.toString(),
+                            imageId: 'image_' + index.toString(),
                             url: item.large_file_url,
                             imgW: item.image_width,
                             imgH: item.image_height
@@ -194,7 +194,7 @@ const home = () => {
                     style={{flex: 2, width: '100%', height: undefined, aspectRatio: 16/12, overflow: 'hidden', alignItems: 'center', justifyContent: 'flex-start'}}
                     >
                         <Animated.Image
-                        // sharedTransitionTag={index.toString()}
+                        sharedTransitionTag={'image_' + index.toString()}
                         source={{ uri: item.large_file_url }}
                         style={{
 

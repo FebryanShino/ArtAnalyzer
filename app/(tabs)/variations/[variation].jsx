@@ -38,14 +38,13 @@ const UserPage = () => {
         <Animated.Image
         sharedTransitionTag={tag}
         source={{uri: url}}
-        style={{width: '100%', maxHeight: '50%', aspectRatio: 1/ratio, alignSelf: 'center', marginTop: 100}}
+        style={{width: '100%', maxHeight: '50%', aspectRatio: 1/ratio, alignSelf: 'center', marginTop: 40}}
         />
         <TouchableOpacity
         style={{
             backgroundColor: formatRGB(palettes[0]),
             width: 100 + '%',
             height: 40,
-            marginTop: -90,
             alignSelf: 'center',
             alignItems: 'center',
             justifyContent: 'center'
