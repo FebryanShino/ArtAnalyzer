@@ -1,12 +1,13 @@
 import { Link, router, useGlobalSearchParams, useLocalSearchParams } from 'expo-router';
 import { View, Text, Pressable, TouchableOpacity, Image } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
-
+import Animated from 'react-native-reanimated';
 
 
 
 const UserPage = () => {
     const { url, variation, ratio } = useLocalSearchParams();
+    const tag = useLocalSearchParams().tag;
     const palettes = JSON.parse(useLocalSearchParams().colorPalette);
     palettes.sort((a, b) => {
         let [r1, g1, b1] = a;
@@ -33,13 +34,18 @@ const UserPage = () => {
     return (
     <SafeAreaView style={{backgroundColor: 'white', padding: 20, height: '100%'}}>
         <Text style={{fontSize: 40, fontWeight: 200, color: formatRGB(palettes[0])}}>{variation}</Text>
-        <Text style={{fontSize: 15, fontWeight: 100, color: formatRGB(palettes[1])}}>{varDesc[variation]}</Text>
-        <Image source={{uri: url}} style={{width: '100%', maxHeight: '50%', aspectRatio: 1/ratio, alignSelf: 'center', marginTop: 40}}/>
+        <Text style={{marginBottom: 40, fontSize: 15, fontWeight: 100, color: formatRGB(palettes[1])}}>{varDesc[variation]}</Text>
+        <Animated.Image
+        sharedTransitionTag={tag}
+        source={{uri: url}}
+        style={{width: '100%', maxHeight: '50%', aspectRatio: 1/ratio, alignSelf: 'center', marginTop: 100}}
+        />
         <TouchableOpacity
         style={{
             backgroundColor: formatRGB(palettes[0]),
             width: 100 + '%',
             height: 40,
+            marginTop: -90,
             alignSelf: 'center',
             alignItems: 'center',
             justifyContent: 'center'
@@ -50,7 +56,7 @@ const UserPage = () => {
         </TouchableOpacity>
         <TouchableOpacity
         style={{marginTop: 'auto', backgroundColor: formatRGB(palettes[0]), width: 80, height: 40, justifyContent: 'center', alignItems: 'center'}}
-        onPress={ () => router.push('/') }
+        onPress={ () => router.back() }
         >
             <Text style={{fontSize: 20, fontWeight: 100, color: formatRGB(palettes[2])}}>Back</Text>
         </TouchableOpacity>

@@ -86,8 +86,8 @@ const Home = () => {
             <View
             style={{width: '100%', height: 150, backgroundColor: 'black', borderRadius: 20, overflow: 'hidden', flexDirection: 'row'}}>
                 <Image
-                source={ require('../assets/logo.png') }
-                style={{width: undefined, aspectRatio: .7, height: '100%'}}
+                source={ require('../assets/ayaya.png') }
+                style={{width: undefined, aspectRatio: 1724/1954, height: '100%', top: 10}}
                 />
                 <View style={{ padding: 10, width: '100%', flex: 2}}>
                     <Text style={{color: 'white'}}>{ greetingText(23, date[0]) }</Text>

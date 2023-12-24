@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, router } from 'expo-router';
 import ColorDetails from '../../components/ColorModal'
 import TagModal from '../../components/TagModal';
-
+import Animated from 'react-native-reanimated';
 
 
 const home = () => {
@@ -12,6 +12,7 @@ const home = () => {
     const COLORTYPE = ['Primary', 'Secondary', 'Accent'];
 
     const [analyzing, setAnalyzing] = useState(false);
+    const [fetching, setFetching] = useState(false);
     const [tags, setTags] = useState('');
     const [posts, setPosts] = useState([
         {"id":2552401,"created_at":"2016-11-25T21:40:42.851-05:00","uploader_id":463832,"score":44,"source":"http://1041uuu.tumblr.com/post/123357559298/original","md5":"278c8023527cf8a4cc12e033e20b1433","last_comment_bumped_at":null,"rating":"g","image_width":500,"image_height":708,"tag_string":"animated animated_gif bridge building car city cityscape commentary_request crane_(machine) evening gradient_sky lamppost moon motor_vehicle no_humans original outdoors pixel_art reflection ripples scenery science_fiction sky star_(sky) starry_sky sunset toyoi_yuuta train water","fav_count":72,"file_ext":"gif","last_noted_at":null,"parent_id":2552398,"has_children":false,"approver_id":null,"tag_count_general":24,"tag_count_artist":1,"tag_count_character":0,"tag_count_copyright":1,"file_size":613938,"up_score":45,"down_score":-1,"is_pending":false,"is_flagged":false,"is_deleted":false,"tag_count":29,"updated_at":"2023-05-05T04:22:33.095-04:00","is_banned":false,"pixiv_id":null,"last_commented_at":null,"has_active_children":false,"bit_flags":0,"tag_count_meta":3,"has_large":false,"has_visible_children":false,"media_asset":{"id":2519483,"created_at":"2016-11-25T21:40:42.851-05:00","updated_at":"2023-02-26T07:53:28.300-05:00","md5":"278c8023527cf8a4cc12e033e20b1433","file_ext":"gif","file_size":613938,"image_width":500,"image_height":708,"duration":4.16,"status":"active","file_key":"G0eUC2cNt","is_public":true,"pixel_hash":"278c8023527cf8a4cc12e033e20b1433","variants":[{"type":"180x180","url":"https://cdn.donmai.us/180x180/27/8c/278c8023527cf8a4cc12e033e20b1433.jpg","width":127,"height":180,"file_ext":"jpg"},{"type":"360x360","url":"https://cdn.donmai.us/360x360/27/8c/278c8023527cf8a4cc12e033e20b1433.jpg","width":254,"height":360,"file_ext":"jpg"},{"type":"720x720","url":"https://cdn.donmai.us/720x720/27/8c/278c8023527cf8a4cc12e033e20b1433.webp","width":500,"height":708,"file_ext":"webp"},{"type":"original","url":"https://cdn.donmai.us/original/27/8c/278c8023527cf8a4cc12e033e20b1433.gif","width":500,"height":708,"file_ext":"gif"}]},"tag_string_general":"bridge building car city cityscape crane_(machine) evening gradient_sky lamppost moon motor_vehicle no_humans outdoors pixel_art reflection ripples scenery science_fiction sky star_(sky) starry_sky sunset train water","tag_string_character":"","tag_string_copyright":"original","tag_string_artist":"toyoi_yuuta","tag_string_meta":"animated animated_gif commentary_request","file_url":"https://cdn.donmai.us/original/27/8c/278c8023527cf8a4cc12e033e20b1433.gif","large_file_url":"https://cdn.donmai.us/original/27/8c/278c8023527cf8a4cc12e033e20b1433.gif","preview_file_url":"https://cdn.donmai.us/180x180/27/8c/278c8023527cf8a4cc12e033e20b1433.jpg"},
@@ -100,13 +101,16 @@ const home = () => {
                 placeholder='Tags'
                 />
                 <TouchableOpacity
-                onPress={ () => booru(tags, 10).then((data) => {
-                    setPosts(data);
-                    setSelectedImg(data[0]);
-                    postScrollContainer.current.scrollTo({ x: 0, animated: true });
-                }) }
+                onPress={ () => {
+                    setFetching(true);
+                    booru(tags, 10).then((data) => {
+                        setPosts(data);
+                        setSelectedImg(data[0]);
+                        postScrollContainer.current.scrollTo({ x: 0, animated: true });
+                        setFetching(false);
+                }) }}
                 style={{
-                    backgroundColor: 'black',
+                    backgroundColor: fetching ? 'red' : 'black',
                     height: '100%',
                     width: undefined,
                     aspectRatio: 1,
@@ -126,7 +130,7 @@ const home = () => {
 
             
             { posts && (
-            <View style={{position: 'relative', borderRadius: 30, overflow: 'hidden', marginTop: 10}}>
+            <View style={{position: 'relative', borderRadius: 30, overflow: 'hidden', marginTop: 10, opacity: fetching ? 0 : 1}}>
                 <View style={{backgroundColor: 'black', opacity: .5, width: '100%', height: '100%', zIndex: 998, position: 'absolute', pointerEvents: 'none'}}></View>
                 <View
                 style={{
@@ -168,7 +172,7 @@ const home = () => {
                 }}
                 style={{
                     aspectRatio: 16/9,
-                    backgroundColor: 'red',
+                    backgroundColor: 'white',
                     width: '100%',
                     aspectRatio: 16/12
                 }}
@@ -176,19 +180,30 @@ const home = () => {
                     {posts.map( (item, index) => (
                     <Pressable
                     key={index}
-                    onPress={ () => setShowFullImage(!showFullImage) }
+                    onPress={ () => {
+                        router.push({
+                        pathname: 'image/' + index,
+                        params: {
+                            imageId: index.toString(),
+                            url: item.large_file_url,
+                            imgW: item.image_width,
+                            imgH: item.image_height
+                        }
+                    }) 
+                    }}
                     style={{flex: 2, width: '100%', height: undefined, aspectRatio: 16/12, overflow: 'hidden', alignItems: 'center', justifyContent: 'flex-start'}}
                     >
-                        <Image
-                            source={{ uri: item.large_file_url }}
-                            style={{
+                        <Animated.Image
+                        // sharedTransitionTag={index.toString()}
+                        source={{ uri: item.large_file_url }}
+                        style={{
 
-                                width: item.image_width/item.image_height <= 1 ? '100%' : undefined,
-                                height: item.image_width/item.image_height <= 1 ? undefined : '100%',
-                                aspectRatio: item.image_width/item.image_height,
-                                resizeMode: 'cover',
-                                // transform: item.image_width/item.image_height <.666 ? [{translateY: 50}] : undefined
-                            }}
+                            width: '100%',
+                            height: undefined,
+                            aspectRatio: 16/12,
+                            resizeMode: 'cover',
+                            borderRadius: 30
+                        }}
                         />
                     </Pressable>
                     ))}
@@ -323,7 +338,12 @@ const home = () => {
                 width: '60%',
                 alignSelf: 'center'
             }}
+            disabled={analyzing}
             onPress={ () => {
+                if (analyzing) {
+                    Alert.alert('Alert', 'Currently analyzing, please wait...');
+                    return;
+                }
                 setAnalyzing(true);
                 cook(selectedImg.large_file_url).then(({ colors, lineart }) => {
                     setColors(colors);
@@ -425,12 +445,15 @@ const home = () => {
                     params: {
                         url: item,
                         ratio: lineart.aspectRatio,
-                        colorPalette: JSON.stringify(colors[0][0])
+                        colorPalette: JSON.stringify(colors[0][0]),
+                        tag: ['Lineart', 'Lightness'][index]
                     }
                 })}
                 >
                     <Text style={{fontSize: 18, fontWeight: 100, marginBottom: 20}}>{['Lineart', 'Lightness'][index]}</Text>
-                    <Image source={{uri: item}} style={{width: '100%', height: undefined, aspectRatio: 1}}/>
+                    <Animated.Image 
+                    sharedTransitionTag={['Lineart', 'Lightness'][index]}
+                    source={{uri: item}} style={{width: '100%', height: undefined, aspectRatio: 1}}/>
                 </TouchableOpacity>
             ))}
             </View>

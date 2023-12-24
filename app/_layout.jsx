@@ -3,7 +3,25 @@ import { Image } from 'react-native'
 
 
 const Layout = () => {
-    return <Tabs>
+    return <Tabs screenOptions={{
+        tabBarActiveTintColor: 'black',
+        tabBarStyle: {
+        height: 70,
+        borderWidth: 1,
+        padding: 10,
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: 350,
+        borderColor: 'white',
+        borderTopColor: 'white',
+        backgroundColor: 'white',
+        },
+        tabBarLabelStyle: {
+        fontSize: 12,
+        fontWeight: "bold",
+        marginBottom: 10,
+        },
+        }}>
         <Tabs.Screen name="index" options={{
             headerShown: false,
             tabBarLabel: 'Home',
@@ -17,6 +35,7 @@ const Layout = () => {
         <Tabs.Screen name="(tabs)" options={
             {headerShown: false}
         }/>
+        <Tabs.Screen name="music"/>
     </Tabs>
 }
 
